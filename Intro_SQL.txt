@@ -1,0 +1,76 @@
+1. Obtenir la liste des 10 villes les plus peuplées en 2012 : 
+	-SELECT ville_nom, ville_population_2012
+	-FROM villes_france_free 
+	-ORDER BY ville_population_2012 DESC 
+	-LIMIT 10; 
+
+2.Obtenir la liste des 50 villes ayant la plus faible superficie: 
+	-SELECT ville_nom, ville_surface 
+	-FROM villes_france_free
+	-ORDER BY ville.surface ASC 
+	-LIMIT 50;
+
+3.Liste des départements d'outre-mer : 
+	-SELECT departement_nom, departement_code 
+	-From departement 
+	-WHERE departement_code LIKE '97%' 
+
+4. 10 villes les plus peuplées de 2012 et le nom du département associés : 
+	-SELECT ville_nom, ville_population_2012, ville_departement, departement_code 
+	-FROM villes_france_free, departement 
+	-WHERE ville_departement = departement_code 
+ 	-ORDER BY ville_population_2012 DESC
+	-LIMIT 10;
+
+5.Nom de chaque département + son code + nombre de commune + ceux qui ont le plus de communes 
+	-SELECT departement_nom , ville_departement,
+	-COUNT(ville_departement)
+	-FROM villes_france_free, departement
+	-WHERE departement_code = ville_departement
+	-GROUP BY ville_departement, departement_nom 
+	-ORDER BY COUNT(ville_departement) DESC; 
+
+6.Les 10 départements les plus grands en superficie: 
+	-SELECT departement_nom, departement_code,
+	-SUM(ville_surface)
+	-FROM villes_france_free, departement 
+	-WHERE departement_code = ville_departement
+	-GROUP BY ville_departement, deparement_nom
+	-ORDER BY SUM(ville_surface) DESC LIMIT 10;
+7. Le nombre de villes qui commencent par "Saint": 
+	-SELECT ----> ICI JE NE PRECISE PAS CE QUE JE SÉLECTIONNE CAR IL VA S'EMMELER ENTRE AFFICHER ET COMPTER 
+	-COUNT(ville_nom) 
+	-FROM villes_france_free 
+	-WHERE ville_nom LIKE 'SAINT%';
+	
+8. Trouver le noms des villes qui existent plusieurs fois, et voir celles qui sont les plus utilisés: 
+	-SELECT ville_nom, 
+	-COUNT(DISTINCT ville_id)
+	-FROM villes_france_free 
+	-GROUP BY ville_nom
+	-HAVING COUNT(ville_nom) > 1 
+	-ORDER BY COUNT(*) DESC 
+	-LIMIT 10;
+
+9. Villes dont la superficie est supérieur à la moyenne:   
+	-SELECT ville_nom, ville_surface,
+	-FROM villes_france_free 
+	-WHERE ville_surface > (SELECT AVG(ville_surface)
+	-FROM villes_france_free
+	-ORDER BY ville_surface DESC
+	-LIMIT 10; 
+10.Liste des départements qui ont plus 2 millions d'habitants : 
+	-SELECT departement_nom, departement_code,
+	-SUM(ville_population_2012) 
+	-FROM villes_france_free, departement 
+	-WHERE departement_code = ville_departement 
+	-GROUP BY ville_departement, departement_nom 
+	-ORDER BY SUM(ville_population_2012) DESC LIMIT 2; 
+
+11. Remplacer les tirets par un espace: 
+	-SELECT REPLACE(ville_nom, "-", " ")
+	-FROM villes_france_free
+	-WHERE ville_nom LIKE 'Saint-%'
+	
+\G: quand trop de colonne, à la place du ; pour que ce soit plus jolie 
+	
